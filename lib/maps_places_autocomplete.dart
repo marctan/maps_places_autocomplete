@@ -101,19 +101,21 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
   }
 
   void showOverlay() {
-    final overlay = Overlay.of(context)!;
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    entry = OverlayEntry(
-        builder: (context) => Positioned(
-              width: size.width,
-              child: CompositedTransformFollower(
-                  link: layerLink,
-                  showWhenUnlinked: false,
-                  offset: Offset(0, size.height + widget.overlayOffset),
-                  child: buildOverlay()),
-            ));
-    overlay.insert(entry!);
+    if (entry == null) {
+      final overlay = Overlay.of(context)!;
+      final RenderBox renderBox = context.findRenderObject() as RenderBox;
+      final size = renderBox.size;
+      entry = OverlayEntry(
+          builder: (context) => Positioned(
+                width: size.width,
+                child: CompositedTransformFollower(
+                    link: layerLink,
+                    showWhenUnlinked: false,
+                    offset: Offset(0, size.height + widget.overlayOffset),
+                    child: buildOverlay()),
+              ));
+      overlay.insert(entry!);
+    }
   }
 
   void hideOverlay() {
