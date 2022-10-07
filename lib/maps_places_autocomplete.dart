@@ -199,6 +199,9 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
                 if(text != _lastText && text == '') {
                   widget.onClearText();
                 }
+                if(text == '') {
+                  hideOverlay();
+                }
                 return await searchAddress(text);
               },
               decoration: getInputDecoration()),
