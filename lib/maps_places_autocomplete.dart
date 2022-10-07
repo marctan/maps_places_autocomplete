@@ -200,12 +200,12 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
               focusNode: focusNode,
               controller: _controller,
               onChanged: (text) async {
-                if(text != _lastText && text == '') {
+                if (text != _lastText && text == '') {
                   widget.onClearText();
                 }
-                if(text == '') {
+                if (text == '') {
                   hideOverlay();
-                } else {
+                } else if (text != '' && focusNode.hasFocus) {
                   showOverlay();
                 }
                 return await searchAddress(text);
