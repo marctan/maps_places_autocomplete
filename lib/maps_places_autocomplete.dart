@@ -13,6 +13,8 @@ class MapsPlacesAutocomplete extends StatefulWidget {
 
   final void Function() onClearText;
 
+  final void Function(String input) onFocusLose;
+
   //your maps api key, must not be null
   final String mapsApiKey;
 
@@ -49,6 +51,7 @@ class MapsPlacesAutocomplete extends StatefulWidget {
       required this.onSuggestionClick,
       required this.mapsApiKey,
       required this.buildItem,
+      required this.onFocusLose,
       this.clearButton,
       this.containerDecoration,
       this.inputDecoration,
@@ -86,6 +89,7 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
         showOverlay();
       } else {
         hideOverlay();
+        widget.onFocusLose(_controller.text);
       }
     });
   }
