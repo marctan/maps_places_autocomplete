@@ -205,6 +205,8 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
                 }
                 if(text == '') {
                   hideOverlay();
+                } else {
+                  showOverlay();
                 }
                 return await searchAddress(text);
               },
