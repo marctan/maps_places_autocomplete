@@ -11,10 +11,6 @@ class MapsPlacesAutocomplete extends StatefulWidget {
   //callback triggered when a item is selected
   final void Function(Place place) onSuggestionClick;
 
-  final void Function() onClearText;
-
-  final void Function(String input) onFocusLose;
-
   //your maps api key, must not be null
   final String mapsApiKey;
 
@@ -51,7 +47,6 @@ class MapsPlacesAutocomplete extends StatefulWidget {
       required this.onSuggestionClick,
       required this.mapsApiKey,
       required this.buildItem,
-      required this.onFocusLose,
       this.clearButton,
       this.containerDecoration,
       this.inputDecoration,
@@ -59,7 +54,6 @@ class MapsPlacesAutocomplete extends StatefulWidget {
       this.overlayOffset = 4,
       this.showGoogleTradeMark = true,
       this.componentCountry,
-      required this.onClearText,
       this.language})
       : super(key: key);
 
@@ -89,7 +83,6 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
         showOverlay();
       } else {
         hideOverlay();
-        widget.onFocusLose(_controller.text);
       }
     });
   }
@@ -124,7 +117,6 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
   }
 
   void _clearText() {
-    widget.onClearText();
     setState(() {
       _controller.clear();
       focusNode.unfocus();
@@ -198,13 +190,16 @@ class _MapsPlacesAutocomplete extends State<MapsPlacesAutocomplete> {
       link: layerLink,
       child: Stack(
         children: [
-          TextField(
+          TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please select an address';
+                }
+                return null;
+              },
               focusNode: focusNode,
               controller: _controller,
               onChanged: (text) async {
-                if (text != _lastText && text == '') {
-                  widget.onClearText();
-                }
                 if (text == '') {
                   hideOverlay();
                 } else if (text != '' && focusNode.hasFocus) {
