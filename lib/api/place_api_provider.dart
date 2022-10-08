@@ -6,7 +6,8 @@ import 'package:maps_places_autocomplete/model/suggestion.dart';
 class PlaceApiProvider {
   final client = Client();
 
-  PlaceApiProvider(this.sessionToken, this.mapsApiKey, this.compomentCountry, this.language);
+  PlaceApiProvider(
+      this.sessionToken, this.mapsApiKey, this.compomentCountry, this.language);
 
   final String sessionToken;
   final String mapsApiKey;
@@ -21,11 +22,12 @@ class PlaceApiProvider {
       'sessiontoken': sessionToken
     };
 
-    if (language !=  null) {
+    if (language != null) {
       parameters.addAll(<String, dynamic>{'language': language});
     }
     if (compomentCountry != null) {
-      parameters.addAll(<String, dynamic>{'components': 'country:$compomentCountry'});
+      parameters
+          .addAll(<String, dynamic>{'components': 'country:$compomentCountry'});
     }
 
     final Uri request = Uri(
@@ -57,7 +59,7 @@ class PlaceApiProvider {
     // if you want to get the details of the selected place by place_id
     final Map<String, dynamic> parameters = <String, dynamic>{
       'place_id': placeId,
-      'fields': 'address_component,geometry',
+      'fields': 'name,formatted_address,geometry,address_components',
       'key': mapsApiKey,
       'sessiontoken': sessionToken
     };
@@ -81,29 +83,30 @@ class PlaceApiProvider {
 
         place.lat = result['result']['geometry']['location']['lat'] as double;
         place.lng = result['result']['geometry']['location']['lng'] as double;
+        place.fullAddress = result['result']['formatted_address'];
 
         components.forEach((c) {
           final List type = c['types'];
           if (type.contains('street_number')) {
-            place.streetNumber = c['long_name'];
-          }
-          if (type.contains('route')) {
             place.street = c['long_name'];
           }
-          if (type.contains('sublocality_level_1')) {
-            place.vicinity = c['long_name'];
+          if (type.contains('route')) {
+            if (place.street != null || place.street != '') {
+              place.street = place.street! + ' ' + c['long_name'];
+            } else {
+              place.street = c['long_name'];
+            }
           }
-          if (type.contains('administrative_area_level_2')) {
-            place.city = c['long_name'];
+          if (type.contains('locality')) {
+            place.suburb = c['long_name'];
           }
+
           if (type.contains('administrative_area_level_1')) {
-            place.state = c['long_name'];
+            place.state = c['short_name'];
           }
-          if (type.contains('country')) {
-            place.country = c['long_name'];
-          }
+
           if (type.contains('postal_code')) {
-            place.zipCode = c['long_name'];
+            place.postCode = c['long_name'];
           }
         });
         return place;

@@ -1,28 +1,24 @@
 class Place {
-  String? streetNumber;
+  String? fullAddress;
   String? street;
-  String? city;
+  String? suburb;
   String? state;
-  String? zipCode;
-  String? vicinity;
-  String? country;
+  String? postCode;
   double? lat;
   double? lng;
 
   Place({
-    this.streetNumber,
+    this.fullAddress,
     this.street,
-    this.city,
+    this.suburb,
     this.state,
-    this.zipCode,
-    this.vicinity,
-    this.country,
+    this.postCode,
     this.lat,
     this.lng,
   });
 
   @override
   String toString() {
-    return 'Place(streetNumber: $streetNumber, street: $street, city: $city, zipCode: $zipCode)';
+    return 'Place(street: $street, suburb: $suburb, postCode: $postCode)';
   }
 }
