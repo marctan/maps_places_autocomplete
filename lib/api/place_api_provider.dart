@@ -91,7 +91,7 @@ class PlaceApiProvider {
             place.street = c['long_name'];
           }
           if (type.contains('route')) {
-            if (place.street != null || place.street != '') {
+            if (place.street != null && place.street != '') {
               place.street = place.street! + ' ' + c['long_name'];
             } else {
               place.street = c['long_name'];
